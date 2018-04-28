@@ -256,6 +256,14 @@ https://github.com/bloomberg/powerfulseal
 
 `$ pip install powerfulseal`
 
+-> Interactive mode <-
+
+`$ powerfulseal --interactive --kube-config ~/.kube/config --inventory-kubernetes -v`
+
+^
+
+-> Autonomous mode <-
+
 ~~~ {.49}
 $ cat example_config.yml
 config:
