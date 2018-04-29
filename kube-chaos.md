@@ -365,51 +365,6 @@ podScenarios:
 
 ---
 
-## Blockade
-https://github.com/worstcase/blockade
-
--> Blockade is a utility for testing network failures and partitions in distributed applications. <-
-
--> Blockade uses Docker containers to run application processes and manages the network from the host system to create various failure scenarios. <-
-
-
-
-~~~ {.31}
-$ cat blockade.yml
-containers:
-  c1:
-    image: krallin/ubuntu-tini:trusty
-    hostname: c1
-    command: ["/bin/sleep", "30000"]
-    # this port is unused, but we need at least one open for docker links
-    expose: [10000]
-
-  c2:
-    image: krallin/ubuntu-tini:trusty
-    hostname: c2
-    command: ["sh", "-c", "ping -i1 $C1_PORT_10000_TCP_ADDR"]
-    links: ["c1"]
-
-  c3:
-    image: krallin/ubuntu-tini:trusty
-    hostname: c3
-    command: ["sh", "-c", "ping -i1 $C1_PORT_10000_TCP_ADDR"]
-    links: ["c1"]
-
-network:
-  flaky: 30%
-  slow: 75ms 100ms distribution normal
-~~~
-
-```$ blockade up
-$ blockade up
-$ blockade flaky <container>
-$ blockade slow <container>
-$ blockade destroy
-```
-
----
-
 ## Takeaways
 
 -> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure. <-
@@ -426,10 +381,11 @@ $ blockade destroy
 [Simian Army Quick-Start-Guide](https://github.com/Netflix/SimianArmy/wiki/Quick-Start-Guide)
 [Software Engineering Daily - Chaos Engineering with Kolton Andrus](https://softwareengineeringdaily.com/2018/02/02/chaos-engineering-with-kolton-andrus/)
 [O'Reilly Choas Engineering](http://www.oreilly.com/webops-perf/free/chaos-engineering.csp)
+[Chaos Toolkit - Getting Started](https://www.katacoda.com/chaostoolkit/courses/01-chaostoolkit-getting-started)
+[Openshift Learning Portal - Fault Injection](https://learn.openshift.com/servicemesh/6-fault-injection)
 
 [kube-monkey](https://github.com/asobti/kube-monkey)
 [Spring Boot Chaos Monkey](https://github.com/codecentric/chaos-monkey-spring-boot)
-[Blockade](https://github.com/worstcase/blockade)
 [PowerfulSeal](https://github.com/bloomberg/powerfulseal)
 
 ---
