@@ -53,40 +53,35 @@
 
 ## Intro
 
--> Chaos creates resilience <-
+Principles of Chaos Engineering
 
--> Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production - principlesofchaos.org <-
+[Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
 
----
+Run disciplined chaos experiments to identify weak points in your system and fix them before they become a problem.
 
-## Chaos Monkey
+^
 
-```
-go get github.com/netflix/chaosmonkey/cmd/chaosmonkey
-```
+-> I. Plan an experiment <-
+-> Create a hypothesis. What could go wrong? <-
 
-~~~ {.14}
-$ cat chaosmonkey.toml
-[chaosmonkey]
-enabled = true
-schedule_enabled = true
-leashed = false
-accounts = ["production", "test"]
+^
 
-[database]
-host = "dbhost.example.com"
-name = "chaosmonkey"
-user = "chaosmonkey"
-encrypted_password = "securepasswordgoeshere"
+-> II. Contain the blast radius <-
+-> Execute the smallest test that will teach you something. <-
 
-[spinnaker]
-endpoint = "http://spinnaker.example.com:8084"
-~~~
+^
+
+-> III. Scale or squash
+-> Find an issue? Job well done. Otherwise increase the blast radius until you’re at full scale. <-
 
 ---
 
 ## kube-monkey
 https://github.com/asobti/kube-monkey
+
+-> An implementation of Netflix's Chaos Monkey for Kubernetes clusters <-
+
+-> It randomly deletes Kubernetes pods in the cluster encouraging and validating the development of failure-resilient services. <-
 
 `$ go get github.com/asobti/kube-monkey`
 
@@ -415,62 +410,27 @@ $ blockade destroy
 
 ---
 
-# Muxy
-## Proxy for simulating real-world distributed system failures to improve resilience in your applications.
-https://github.com/mefellows/muxy
+## Takeaways
 
-`$ brew install https://raw.githubusercontent.com/mefellows/muxy/master/scripts/muxy.rb`
-`$ go get github.com/mefellows/muxy`
+-> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure. <-
 
-~~~ {.27}
-$ cat config.yml
-# Configures a proxy to forward/mess with your requests
-# to/from www.onegeek.com.au. This example adds a 5s delay
-# to the response.
-proxy:
-  - name: http_proxy
-    config:
-      host: 0.0.0.0
-      port: 8181
-      proxy_host: www.onegeek.com.au
-      proxy_port: 80
+-> Chaos Engineering is accessible and easy to implement <-
 
-# Proxy plugins
-middleware:
-  - name: http_tamperer
-    config:
-      request:
-        host: "www.onegeek.com.au"
-
-  # Message Delay request/response plugin
-  - name: delay
-    config:
-      request_delay: 1000
-      response_delay: 500
-
-  # Log in/out messages
-  - name: logger
-~~~
-
-`$ muxy proxy --config ./config.yml`
-
-~~~ {.7}
-$ docker pull mefellows/muxy
-$ docker run \
-  -d \
-  -p 80:80 \
-  -v "$PWD/conf":/opt/muxy/conf \
-  --privileged \
-  mefellows/muxy
-~~~
+-> Start testing today <-
 
 ---
 
 ## Resources
 
 [awesome-chaos-engineering](https://github.com/dastergon/awesome-chaos-engineering)
-[Quick-Start-Guide](https://github.com/Netflix/SimianArmy/wiki/Quick-Start-Guide)
-[chaos-engineering-with-kolton-andrus](https://softwareengineeringdaily.com/2018/02/02/chaos-engineering-with-kolton-andrus/)
+[Simian Army Quick-Start-Guide](https://github.com/Netflix/SimianArmy/wiki/Quick-Start-Guide)
+[Software Engineering Daily - Chaos Engineering with Kolton Andrus](https://softwareengineeringdaily.com/2018/02/02/chaos-engineering-with-kolton-andrus/)
+[O'Reilly Choas Engineering](http://www.oreilly.com/webops-perf/free/chaos-engineering.csp)
+
+[kube-monkey](https://github.com/asobti/kube-monkey)
+[Spring Boot Chaos Monkey](https://github.com/codecentric/chaos-monkey-spring-boot)
+[Blockade](https://github.com/worstcase/blockade)
+[PowerfulSeal](https://github.com/bloomberg/powerfulseal)
 
 ---
 
