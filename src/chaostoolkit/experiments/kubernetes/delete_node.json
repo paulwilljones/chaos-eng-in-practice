@@ -1,0 +1,9 @@
+{
+  "type": "action",
+  "provider": {
+    "type": "python",
+    "func": "delete_nodes",
+    "module": "chaosk8s.node.actions"
+  },
+  "name": "delete-nodes"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "all-our-microservices-should-be-healthy",
+    "provider": {
+        "type": "python",
+        "module": "chaosk8s.probes",
+        "func": "microservice_available_and_healthy",
+        "arguments": {
+            "name": "myapp",
+            "ns": "myns"
+        }
+    }
+},
+{
+    "type": "action",
+    "name": "terminate-db-pod",
+    "provider": {
+        "type": "python",
+        "module": "chaosk8s.pod.actions",
+        "func": "terminate_pods",
+        "arguments": {
+            "label_selector": "app=my-app",
+            "name_pattern": "my-app-[0-9]$",
+            "rand": true,
+            "ns": "default"
+        }
+    },
+    "pauses": {
+        "after": 5
+    }
+}
