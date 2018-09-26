@@ -15,6 +15,10 @@ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
 
 kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml)
 
+kubectl label namespace default istio-injection=enabled
+
+kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+
 kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
@@ -24,7 +28,9 @@ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 
 curl -I http://${GATEWAY_URL}/productpage
 
-kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
+#kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
+kubectl apply -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
 
+#samples/bookinfo/platform/kube/cleanup.sh
 #kubectl -n istio-system delete service istio-ingressgateway
 #gcloud container clusters delete istio-tutorial

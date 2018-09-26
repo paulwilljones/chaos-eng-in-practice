@@ -1,11 +1,11 @@
-%title: CloudNative London 2018 - Chaos Engineering in Practice
-%author: @paulwilljones
-%date: 2018-05-01
+%title: CloudNative London - Chaos Engineering in Practice
+%author: @paulwilljones    sli.do -> #chaosenginpractice
+%date: 2018-09-26
 
 -> # Chaos Engineering in Practice <-
 
--> CloudNative London 2018 <-
--> September 28 2018 <-
+-> CloudNative London <-
+-> September 26 2018 <-
 
 -> ───────────────▄████████▄──────── <-
 -> ─────────────▄█▀───────▀██▄────── <-
@@ -54,29 +54,35 @@
 
 # What is Chaos Engineering?
 
----
+^
 
-# What is Resilience Engineering?
+-> Thoughtful, planned experiments designed to reveal the weaknesses in our systems - Kolton Andrus (cofounder and CEO of Gremlin Inc)
+^
+
+-> Chaos isn’t done to cause problems; it is done to reveal them - Nora Jones (Netflix)
+^
+
+-> [Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
+
 
 ---
 
 # Principles of Chaos Engineering
-
-[Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
-
-Run disciplined chaos experiments to identify weak points in your system and fix them before they become a problem.
-
 ^
 
 -> I. Plan an experiment <-
 -> Create a hypothesis. What could go wrong? <-
 
-^
+---
+
+# Principles of Chaos Engineering
 
 -> II. Contain the blast radius <-
 -> Execute the smallest test that will teach you something. <-
 
-^
+---
+
+# Principles of Chaos Engineering
 
 -> III. Scale or squash
 -> Find an issue? Job well done. Otherwise increase the blast radius until you’re at full scale. <-
@@ -84,58 +90,47 @@ Run disciplined chaos experiments to identify weak points in your system and fix
 ---
 
 # Why Should We Care?
-
-Failure will happen
 ^
 
-As distributed systems have grown much more complex, failures have become much more difficult to predict.
+-> Failure is inevitable
 ^
 
--> Fallacies of distributed computing:
+-> As distributed systems have grown more complex, failures have become more difficult to predict
 ^
--> 1. The network is reliable.
-^
--> 2. Latency is zero.
-^
--> 3. Bandwidth is infinite.
-^
--> 4. The network is secure.
-^
--> 5. Topology doesn't change.
-^
--> 6. There is one administrator.
-^
--> 7. Transport cost is zero.
-^
--> 8. The network is homogeneous.
+
+-> A reliance on managed services takes away control to ensure resiliency
 
 ---
 
-# Examples of Chaos Tooling
+## Istio
 ^
 
-## Istio
+-> Open source service mesh that layers transparently onto existing distributed applications.
+^
 
-What is it?
 
-Why is it necessary?
+-> Traffic Management
+^
 
-How does it do it?
+-> Security
+^
 
-What does it enable us to do?
+-> Observability
 
 ---
 
 # Istio Fault Injection
 ^
 
-A VirtualService defines the rules that control how requests for a service are routed within an Istio service mesh.
+-> Istio enables protocol-specific fault injection into the network, instead of killing pods or delaying or corrupting packets at the TCP layer.
 ^
 
-A DestinationRule configures the set of policies to be applied to a request after VirtualService routing has occurred.
+-> *Key Terms
+^
+-> A VirtualService defines the rules that control how requests for a service are routed within an Istio service mesh.
 ^
 
-This facilitates fault injection by intercepting traffic destined for pods
+-> A DestinationRule configures the set of policies to be applied to a request after VirtualService routing has occurred.
 
 ---
 
@@ -143,13 +138,87 @@ This facilitates fault injection by intercepting traffic destined for pods
 
 ---
 
-# Istio Fault Injection
-
-When would you use this?
+~~~{.20}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: paul
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+~~~
 
 ---
 
-# Istio Circuit Breaking
+~~~{.24}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: paul
+    fault:
+      delay:
+        percent: 100
+        fixedDelay: 7s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+~~~
+
+---
+
+~~~{.25}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+  ...
+spec:
+  hosts:
+  - ratings
+  http:
+  - fault:
+      abort:
+        httpStatus: 500
+        percent: 100
+    match:
+    - headers:
+        end-user:
+          exact: paul
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+~~~
 
 ---
 
@@ -159,62 +228,59 @@ When would you use this?
 -> [The Chaos Toolkit aims to be the simplest and easiest way to explore building, and automating, your own Chaos Engineering Experiments.](chaostoolkit.org)
 ^
 
-- Usage
-* Drivers:
-  - Kubernetes
-  - AWS
-  - GCE
-  - Azure
-  - Spring
-  - Cloud Foundry
-  - Prometheus
+-> * Core features
+^
+-> Steady State Hypothesis
+^
+-> Probes
+^
+-> Actions
+^
+-> Rollback
+^
+
+-> * Drivers:
+->  Kubernetes
+->  AWS
+->  GCE
+->  Azure
+->  Spring
+->  Cloud Foundry
+->  Prometheus
 
 ---
 
 # chaostoolkit-kubernetes
-
-Driver for interfacing with the kube api to translate experiments into procedural actions
-
-Actions:
-- terminate_pod
-- remove_service_endpoint
-- delete_nodes
-
----
-
-# chaostoolkit-google-cloud
-
-Driver to call GCE api to perform experiment actions
-
-Actions:
-- swap_nodepool
-- delete_nodepool
-
----
-
-# chaostoolkit + Istio
-
-Use kubernetes driver (or impl) to create istio resources?
-
-- delete istio resources
-
 ^
-Demo
+
+-> The Chaos Toolkit driver extension for Kubernetes exposes a set of activities to interact and query your Kubernetes system. Use it whenever you want to run chaos engineering experiments against applications that live inside your Kubernetes clusters.
+^
+
+-> *Actions:
+-> terminate_pod
+-> remove_service_endpoint
+-> delete_nodes
 
 ---
 
-# CNCF WG
+-> Demo
+
+---
+
+-> # CNCF WG
 
 ---
 
 # Takeaways
+^
 
 -> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure. <-
 ^
+
 -> Chaos Engineering is accessible and easy to implement <-
 ^
--> Start testing today <-
-^
+
+-> Start causing chaos today <-
 
 ---
 
