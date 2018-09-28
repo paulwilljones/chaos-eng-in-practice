@@ -57,10 +57,8 @@
 ^
 
 -> Thoughtful, planned experiments designed to reveal the weaknesses in our systems - Kolton Andrus (cofounder and CEO of Gremlin Inc)
-^
 
 -> Chaos isn’t done to cause problems; it is done to reveal them - Nora Jones (Netflix)
-^
 
 -> [Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
 
@@ -102,6 +100,11 @@
 
 ---
 
+## Chaos Engineering tools
+^
+
+---
+
 ## Istio
 ^
 
@@ -138,93 +141,9 @@
 
 ---
 
-~~~{.20}
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: reviews
-spec:
-  hosts:
-    - reviews
-  http:
-  - match:
-    - headers:
-        end-user:
-          exact: paul
-    route:
-    - destination:
-        host: reviews
-        subset: v2
-  - route:
-    - destination:
-        host: reviews
-        subset: v1
-~~~
-
----
-
-~~~{.24}
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: ratings
-spec:
-  hosts:
-  - ratings
-  http:
-  - match:
-    - headers:
-        end-user:
-          exact: paul
-    fault:
-      delay:
-        percent: 100
-        fixedDelay: 7s
-    route:
-    - destination:
-        host: ratings
-        subset: v1
-  - route:
-    - destination:
-        host: ratings
-        subset: v1
-~~~
-
----
-
-~~~{.25}
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: ratings
-  ...
-spec:
-  hosts:
-  - ratings
-  http:
-  - fault:
-      abort:
-        httpStatus: 500
-        percent: 100
-    match:
-    - headers:
-        end-user:
-          exact: paul
-    route:
-    - destination:
-        host: ratings
-        subset: v1
-  - route:
-    - destination:
-        host: ratings
-        subset: v1
-~~~
-
----
-
 # chaostoolkit
-
 ^
+
 -> [The Chaos Toolkit aims to be the simplest and easiest way to explore building, and automating, your own Chaos Engineering Experiments.](chaostoolkit.org)
 ^
 
@@ -267,10 +186,6 @@ spec:
 
 ---
 
--> # CNCF WG
-
----
-
 # Takeaways
 ^
 
@@ -295,10 +210,13 @@ spec:
 [Istio Fault Injection](https://istio.io/docs/concepts/traffic-management/#fault-injection)
 [Chaos Toolkit](https://chaostoolkit.org/)
 [Chaos Toolkit - Katacoda](https://www.katacoda.com/chaostoolkit/courses/01-chaostoolkit-getting-started)
+
 [Openshift Learning Portal - Fault Injection](https://learn.openshift.com/servicemesh/6-fault-injection)
 [kube-monkey](https://github.com/asobti/kube-monkey)
 [Spring Boot Chaos Monkey](https://github.com/codecentric/chaos-monkey-spring-boot)
 [PowerfulSeal](https://github.com/bloomberg/powerfulseal)
+
+[CNCF Chaos Engineering](https://github.com/chaoseng/wg-chaoseng)
 
 ---
 

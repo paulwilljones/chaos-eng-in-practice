@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-gcloud container clusters create istio-tutorial \
+gcloud container clusters create chaos-cluster \
     --machine-type=n1-standard-2 \
     --num-nodes=4 \
     --no-enable-legacy-authorization
 
-gcloud container clusters get-credentials istio-tutorial
+gcloud container clusters get-credentials chaos-cluster
 
 kubectl create clusterrolebinding cluster-admin-binding \
   --clusterrole=cluster-admin \
