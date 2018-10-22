@@ -1,11 +1,11 @@
-%title: CloudNative London - Chaos Engineering in Practice
+%title: Voxxed Days Bristol - Chaos Engineering in Practice
 %author: @paulwilljones    sli.do -> #chaosenginpractice
-%date: 2018-09-26
+%date: 2018-10-25
 
 -> # Chaos Engineering in Practice <-
 
--> CloudNative London <-
--> September 26 2018 <-
+-> Voxxed Days Bristol <-
+-> October 25 2018 <-
 
 -> ───────────────▄████████▄──────── <-
 -> ─────────────▄█▀───────▀██▄────── <-
@@ -57,8 +57,10 @@
 ^
 
 -> Thoughtful, planned experiments designed to reveal the weaknesses in our systems - Kolton Andrus (cofounder and CEO of Gremlin Inc)
+^
 
 -> Chaos isn’t done to cause problems; it is done to reveal them - Nora Jones (Netflix)
+^
 
 -> [Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
 
@@ -100,10 +102,8 @@
 
 ---
 
-## Chaos Engineering tools
+# Chaos Engineering tools
 ^
-
----
 
 ## Istio
 ^
@@ -189,10 +189,13 @@
 # Takeaways
 ^
 
--> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure. <-
+-> Increased complexity in systems has caused failures to be more difficult to predict <-
 ^
 
--> Chaos Engineering is accessible and easy to implement <-
+-> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure <-
+^
+
+-> Weaknesses may not always be technical <-
 ^
 
 -> Start causing chaos today <-
