@@ -1,66 +1,15 @@
-%title: Voxxed Days Bristol - Chaos Engineering in Practice
+%title: Docker London - Chaos Engineering in Practice
 %author: @paulwilljones    sli.do -> #chaosenginpractice
-%date: 2018-10-25
-
--> # Chaos Engineering in Practice <-
-
--> Voxxed Days Bristol <-
--> October 25 2018 <-
-
--> ───────────────▄████████▄──────── <-
--> ─────────────▄█▀───────▀██▄────── <-
--> ───────────▄█▀───────────██────── <-
--> ─────────▄█▀──────▄──────▐█▌───── <-
--> ────────▄█────────▀█─────▐█▌───── <-
--> ───────▄█──────────▀█───▄██────── <-
--> ──────▄█────────────▀█─▄█▀█▄───── <-
--> ─────▄█──────────────██▀───█▄──── <-
--> ────▄█──────────────────────█▄─── <-
--> ───▄█────────────────────────█▄── <-
--> ──▄█───▄██████▄────▄█████▄────█── <-
--> ──█───█▀─────▀█────█▀────▀█───█── <-
--> ──█───█──▄────▀████▀───▄──█───█── <-
--> ▄███▄─█▄─▐▀▄─────────▄▀▌─▄█─▄███▄ <-
--> █▀──█▄─█─▐▐▀▀▄▄▄─▄▄▄▀▀▌▌─█─▄█──▀█ <-
--> █────█─█─▐▐──▄▄─█─▄▄──▌▌─█─█────█ <-
--> █─▄──█─█─▐▐▄─▀▀─█─▀▀─▄▌▌─█─█──▄─█ <-
--> █──█─█─█──▌▄█▄▄▀─▀▄▄█▄▐──█─█─█──█ <-
--> █▄─█████████▀──▀▄▀──▀█████████─▄█ <-
--> ─██▀──▄▀──▀──▀▄───▄▀──▀──▀▄──▀██ <-
--> ██─────────────────────────────██ <-
--> █───────────────────────────────█ <-
--> █─▄───────────────────────────▄─█ <-
--> █─▀█▄───────────────────────▄█▀─█ <-
--> █──█▀███████████████████████▀█──█ <-
--> █──█────█───█───█───█───█────█──█ <-
--> █──▀█───█───█───█───█───█───█▀──█ <-
--> █───▀█▄▄█▄▄▄█▄▄▄█▄▄▄█▄▄▄█▄▄█▀───█ <-
--> ▀█───█──█───█───█───█───█──█───█▀ <-
--> ─▀█──▀█▄█───█───█───█───█▄█▀──█▀─ <-
--> ──▀█───▀▀█▄▄█───█───█▄▄█▀▀───█▀── <-
--> ───▀█─────▀▀█████████▀▀─────█▀─── <-
--> ────▀█─────▄─────────▄─────█▀──── <-
--> ─────▀██▄───▀▀▀▀▀▀▀▀▀───▄██▀───── <-
--> ────────▀██▄▄───────▄▄██▀──────── <-
--> ───────────▀▀███████▀▀─────────── <-
-
-
--> *Paul Jones* <-
--> *@paulwilljones* <-
--> *github/paulwilljones/chaos-eng-in-practice* <-
-
-
----
+%date: 2018-11-22
 
 # What is Chaos Engineering?
 
 ^
 
 -> Thoughtful, planned experiments designed to reveal the weaknesses in our systems - Kolton Andrus (cofounder and CEO of Gremlin Inc)
-^
 
 -> Chaos isn’t done to cause problems; it is done to reveal them - Nora Jones (Netflix)
-^
+
 
 -> [Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production](https://principlesofchaos.org)
 
@@ -112,13 +61,13 @@
 ^
 
 
--> Traffic Management
+-> ## Traffic Management
 ^
 
--> Security
+-> ## Security
 ^
 
--> Observability
+-> ## Observability
 
 ---
 
@@ -172,13 +121,36 @@
 # chaostoolkit-kubernetes
 ^
 
--> The Chaos Toolkit driver extension for Kubernetes exposes a set of activities to interact and query your Kubernetes system. Use it whenever you want to run chaos engineering experiments against applications that live inside your Kubernetes clusters.
+-> The Chaos Toolkit driver extension for Kubernetes.
+
+-> Exposes a set of activities to interact and query your Kubernetes system.
+
+-> Run chaos engineering experiments against applications that live inside your Kubernetes clusters.
 ^
 
 -> *Actions:
--> terminate_pod
+-> start_microservice
+-> kill_microservice
+-> scale_microservice
+-> terminate_pods
 -> remove_service_endpoint
+-> create_node
+-> cordon_node
+-> uncordon_node
+-> drain_node
 -> delete_nodes
+^
+
+-> *Probes:
+-> all_microservices_healthy
+-> microservice_available_and_healthy
+-> microservice_is_not_available
+-> service_endpoint_is_initialized
+-> deployment_is_not_fully_available
+-> read_pod_logs
+-> pods_in_phase
+-> count_pods
+-> get_nodes
 
 ---
 
@@ -195,10 +167,10 @@
 -> In order to prevent failures from happening, there is a need to be proactive in our efforts to learn from failure <-
 ^
 
--> Weaknesses may not always be technical <-
+-> Chaos engineering addresses all aspects of the sociotechnical system of software development <-
 ^
 
--> Start causing chaos today <-
+-> Start causing (controlled) chaos today <-
 
 ---
 
@@ -212,12 +184,10 @@
 
 [Istio Fault Injection](https://istio.io/docs/concepts/traffic-management/#fault-injection)
 [Chaos Toolkit](https://chaostoolkit.org/)
-[Chaos Toolkit - Katacoda](https://www.katacoda.com/chaostoolkit/courses/01-chaostoolkit-getting-started)
 
+[Istio Fault Injection - Katacoda](https://katacoda.com/courses/istio/increasing-reliability/simulating-failures-between-microservices)
+[Chaos Toolkit - Katacoda](https://www.katacoda.com/chaostoolkit/courses/01-chaostoolkit-getting-started)
 [Openshift Learning Portal - Fault Injection](https://learn.openshift.com/servicemesh/6-fault-injection)
-[kube-monkey](https://github.com/asobti/kube-monkey)
-[Spring Boot Chaos Monkey](https://github.com/codecentric/chaos-monkey-spring-boot)
-[PowerfulSeal](https://github.com/bloomberg/powerfulseal)
 
 [CNCF Chaos Engineering](https://github.com/chaoseng/wg-chaoseng)
 

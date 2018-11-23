@@ -8,5 +8,6 @@ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yam
 kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
 
 kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-abort.yaml
+ktail -n default -l app=reviews
 
 kubectl delete -f samples/bookinfo/networking/virtual-service-all-v1.yaml
